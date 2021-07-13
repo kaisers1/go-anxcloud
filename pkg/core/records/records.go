@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 const pathPrefix = "/api/clouddns/v1/zone.json"
@@ -33,11 +34,11 @@ type listResponse struct {
 	Data []Summary `json:"data"`
 }
 
-func (a api) List(ctx context.Context) ([]Summary, error) {
+func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
-		pathPrefix,
+		pathPrefix, zoneName,
 	)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
@@ -94,14 +95,26 @@ func (a api) Get(ctx context.Context, id string) (Info, error) {
 	return info, nil
 }
 
-func (a api) AddRecord(ctx context.Context, zonename string) ([]Summary, error) {
+func (a api) AddRecord(ctx context.Context, zoneName, recordType, recordData string) ([]Summary, error) {
 	url := fmt.Sprintf(
 		"%s%s/%v/records",
 		a.client.BaseURL(),
-		pathPrefix, zonename,
+		pathPrefix, zoneName,
 	)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, nil)
+	/* example obj
+	{
+	    "type": "A",
+	    "rdata": "9.9.9.9"
+	}
+	*/
+	obj := fmt.Sprintf(
+		"{\"type\":\"%s\",\"rdata\":\"%s\"}",
+		recordType, recordData,
+	)
+	//reader, _ := client.NewReader(ctx,obj)
+	reader := strings.NewReader(obj) //falscher reader ???? strings Reader !== io Reader
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, reader)
 	if err != nil {
 		return nil, fmt.Errorf("could not attach record post request: %w", err)
 	}
@@ -121,10 +134,10 @@ func (a api) AddRecord(ctx context.Context, zonename string) ([]Summary, error) 
 	return summary, nil
 }
 
-func (a api) RemoveRecord(ctx context.Context, zonename, recordId string) error {
+func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error {
 	url := fmt.Sprintf(
 		"%s%s/%v/records/%v",
-		a.client.BaseURL(), zonename, recordId,
+		a.client.BaseURL(), zoneName, recordId,
 	)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)
