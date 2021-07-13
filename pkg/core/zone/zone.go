@@ -1,4 +1,4 @@
-package records
+package zone
 
 import (
 	"context"
@@ -108,6 +108,8 @@ func (a api) AddRecord(ctx context.Context, zoneName, recordType, recordData str
 	    "rdata": "9.9.9.9"
 	}
 	*/
+
+	//TODO other fields
 	obj := fmt.Sprintf(
 		"{\"type\":\"%s\",\"rdata\":\"%s\"}",
 		recordType, recordData,
