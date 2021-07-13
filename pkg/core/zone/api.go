@@ -9,7 +9,7 @@ import (
 type API interface {
 	List(ctx context.Context, zoneName string) ([]Summary, error)
 	//Get(ctx context.Context, id string) (Info, error)
-	AddRecord(ctx context.Context, zoneName, recordType, recordData string) ([]Summary, error)
+	AddRecord(ctx context.Context, zoneName, jsonString string) error
 	RemoveRecord(ctx context.Context, zoneName, recordId string) error
 }
 

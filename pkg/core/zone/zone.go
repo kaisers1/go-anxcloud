@@ -95,7 +95,7 @@ func (a api) Get(ctx context.Context, id string) (Info, error) {
 	return info, nil
 }
 
-func (a api) AddRecord(ctx context.Context, zoneName, recordType, recordData string) ([]Summary, error) {
+func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 	url := fmt.Sprintf(
 		"%s%s/%v/records",
 		a.client.BaseURL(),
@@ -109,31 +109,26 @@ func (a api) AddRecord(ctx context.Context, zoneName, recordType, recordData str
 	}
 	*/
 
-	//TODO other fields
-	obj := fmt.Sprintf(
-		"{\"type\":\"%s\",\"rdata\":\"%s\"}",
-		recordType, recordData,
-	)
 	//reader, _ := client.NewReader(ctx,obj)
-	reader := strings.NewReader(obj) //falscher reader ???? strings Reader !== io Reader
+	reader := strings.NewReader(jsonString) //falscher reader ???? strings Reader !== io Reader
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, reader)
 	if err != nil {
-		return nil, fmt.Errorf("could not attach record post request: %w", err)
+		return fmt.Errorf("could not attach record post request: %w", err)
 	}
 
 	httpResponse, err := a.client.Do(req)
 	if httpResponse.StatusCode >= 500 && httpResponse.StatusCode < 600 {
-		return nil, fmt.Errorf("could not execute attach record request, got response %s", httpResponse.Status)
+		return fmt.Errorf("could not execute attach record request, got response %s", httpResponse.Status)
 	}
 
 	var summary []Summary
 	err = json.NewDecoder(httpResponse.Body).Decode(&summary)
 	_ = httpResponse.Body.Close()
 	if err != nil {
-		return nil, fmt.Errorf("could not decode attach record response: %w", err)
+		return fmt.Errorf("could not decode attach record response: %w", err)
 	}
 
-	return summary, nil
+	return nil
 }
 
 func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error {
