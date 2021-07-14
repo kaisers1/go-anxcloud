@@ -35,6 +35,7 @@ type listResponse struct {
 }
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
+
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
