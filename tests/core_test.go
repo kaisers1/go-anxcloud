@@ -2,6 +2,7 @@ package tests_test
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/anexia-it/go-anxcloud/pkg/client"
@@ -9,7 +10,7 @@ import (
 	"github.com/anexia-it/go-anxcloud/pkg/core/resource"
 	"github.com/anexia-it/go-anxcloud/pkg/core/service"
 	"github.com/anexia-it/go-anxcloud/pkg/core/tags"
-
+	"github.com/anexia-it/go-anxcloud/pkg/core/zone"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -63,6 +64,18 @@ var _ = Describe("Core API endpoint tests", func() {
 			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
 			defer cancel()
 			_, err := tags.NewAPI(cli).List(ctx, 1, 1000, "", "", "", "", true)
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+	})
+
+	Context("Zones endpoint", func() {
+
+		It("Should list all created records", func() {
+			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+			defer cancel()
+			list, err := zone.NewAPI(cli).List(ctx, "dev.se.anx.io")
+			fmt.Print(list)
 			Expect(err).NotTo(HaveOccurred())
 		})
 
