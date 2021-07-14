@@ -37,6 +37,7 @@ type listResponse struct {
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
 	klog.Infof("baseurl: %s; pathprefix: %s; zonename: %s", a.client.BaseURL(), pathPrefix, zoneName)
+
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
