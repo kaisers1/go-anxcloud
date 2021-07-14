@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"k8s.io/klog"
 	"net/http"
 	"strings"
 )
@@ -35,7 +36,7 @@ type listResponse struct {
 }
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
-
+	klog.Infof("baseurl: %s; pathprefix: %s; zonename: %s", a.client.BaseURL(), pathPrefix, zoneName)
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
@@ -135,7 +136,7 @@ func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error {
 	url := fmt.Sprintf(
 		"%s%s/%s/records/%s",
-		a.client.BaseURL(),pathPrefix, zoneName, recordId,
+		a.client.BaseURL(), pathPrefix, zoneName, recordId,
 	)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)

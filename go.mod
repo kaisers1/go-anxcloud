@@ -7,7 +7,7 @@ require (
 	github.com/onsi/gomega v1.10.4
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0
-	github.com/anexia-it/go-anxcloud v0.3.21
+	k8s.io/klog v1.0.0
 )
 
 replace github.com/anexia-it/go-anxcloud => github.com/kaisers1/go-anxcloud v0.3.24
