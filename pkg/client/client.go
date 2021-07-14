@@ -131,7 +131,7 @@ func TokenFromEnv(unset bool) Option {
 	return func(o *optionSet) error {
 		token, tokenPresent := os.LookupEnv(TokenEnvName)
 		if !tokenPresent {
-			return fmt.Errorf("%w: %s", ErrEnvMissing, TokenEnvName)
+			return fmt.Errorf("%w: %s : %s", ErrEnvMissing, TokenEnvName, token)
 		}
 		o.token = token
 		if unset {

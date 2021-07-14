@@ -8,3 +8,5 @@ require (
 	github.com/stretchr/testify v1.7.0
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0
 )
+
+replace github.com/anexia-it/go-anxcloud => github.com/kaisers1/go-anxcloud v0.3.23
