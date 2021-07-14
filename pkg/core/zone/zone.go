@@ -98,7 +98,7 @@ func (a api) Get(ctx context.Context, id string) (Info, error) {
 
 func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 	url := fmt.Sprintf(
-		"%s%s/%v/records",
+		"%s%s/%s/records",
 		a.client.BaseURL(),
 		pathPrefix, zoneName,
 	)
@@ -134,8 +134,8 @@ func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 
 func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error {
 	url := fmt.Sprintf(
-		"%s%s/%v/records/%v",
-		a.client.BaseURL(), zoneName, recordId,
+		"%s%s/%s/records/%s",
+		a.client.BaseURL(),pathPrefix, zoneName, recordId,
 	)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)
