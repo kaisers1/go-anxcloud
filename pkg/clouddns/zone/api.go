@@ -8,7 +8,7 @@ import (
 // API contains methods for tag control.
 type API interface {
 	List(ctx context.Context, zoneName string) ([]Summary, error)
-	//Get(ctx context.Context, id string) (Info, error)
+	Get(ctx context.Context, id string) (Info, error)
 	AddRecord(ctx context.Context, zoneName, jsonString string) error
 	RemoveRecord(ctx context.Context, zoneName, recordId string) error
 }

@@ -37,8 +37,6 @@ type listResponse struct {
 }
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
-	klog.Infof("baseurl: %s; pathprefix: %s; zonename: %s", a.client.BaseURL(), pathPrefix, zoneName)
-
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
@@ -108,41 +106,30 @@ func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 		pathPrefix, zoneName,
 	)
 
-	/* example obj
-	{
-	    "type": "A",
-	    "rdata": "9.9.9.9"
-	}
-	*/
-
-	//reader, _ := client.NewReader(ctx,obj)
-	reader := strings.NewReader(jsonString) //falscher reader ???? strings Reader !== io Reader
+	reader := strings.NewReader(jsonString)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, reader)
 	if err != nil {
 		return fmt.Errorf("could not attach record post request: %w", err)
 	}
 
 	httpResponse, err := a.client.Do(req)
+	var responsePayload Info
+	err = json.NewDecoder(httpResponse.Body).Decode(&responsePayload)
 	if httpResponse.StatusCode >= 500 && httpResponse.StatusCode < 600 {
 		return fmt.Errorf("could not execute attach record request, got response %s", httpResponse.Status)
 	}
 
-	var summary []Summary
-	err = json.NewDecoder(httpResponse.Body).Decode(&summary)
 	_ = httpResponse.Body.Close()
-	if err != nil {
-		return fmt.Errorf("could not decode attach record response: %w", err)
-	}
-
 	return nil
 }
 
 func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error {
+
 	url := fmt.Sprintf(
 		"%s%s/%s/records/%s",
 		a.client.BaseURL(), pathPrefix, zoneName, recordId,
 	)
-
+	klog.Info(url)
 	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, url, nil)
 	if err != nil {
 		return fmt.Errorf("could not create record delete request: %w", err)
