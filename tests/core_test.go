@@ -2,13 +2,10 @@ package tests_test
 
 import (
 	"context"
-	"fmt"
-	"github.com/anexia-it/go-anxcloud/pkg/clouddns/zone"
 	"github.com/anexia-it/go-anxcloud/pkg/core/location"
 	"github.com/anexia-it/go-anxcloud/pkg/core/resource"
 	"github.com/anexia-it/go-anxcloud/pkg/core/service"
 	"github.com/anexia-it/go-anxcloud/pkg/core/tags"
-	"os"
 	"time"
 
 	"github.com/anexia-it/go-anxcloud/pkg/client"
@@ -22,7 +19,6 @@ var _ = Describe("Core API endpoint tests", func() {
 
 	BeforeEach(func() {
 		var err error
-		os.Setenv("ANEXIA_TOKEN", "tNSwT-Fnp0Ac2mQv1ntt2OBraSnw7Atu")
 		cli, err = client.New(client.AuthFromEnv(false))
 		Expect(err).ToNot(HaveOccurred())
 	})
@@ -71,15 +67,4 @@ var _ = Describe("Core API endpoint tests", func() {
 
 	})
 
-	Context("Zones endpoint", func() {
-
-		It("Should list all created records", func() {
-			ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
-			defer cancel()
-			list, err := zone.NewAPI(cli).List(ctx, "dev.se.anx.io")
-			fmt.Print(list)
-			Expect(err).NotTo(HaveOccurred())
-		})
-
-	})
 })
