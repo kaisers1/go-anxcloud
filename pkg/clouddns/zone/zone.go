@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"k8s.io/klog"
 	"net/http"
 	"strings"
@@ -58,7 +59,9 @@ func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
 	}
 
 	var responsePayload listResponse
-	err = json.NewDecoder(httpResponse.Body).Decode(&responsePayload)
+	b, err := io.ReadAll(httpResponse.Body)
+	//fmt.Println(string(b))
+	err = json.NewDecoder(strings.NewReader(fmt.Sprintf("{ \"data\":%s}", string(b)))).Decode(&responsePayload)
 	_ = httpResponse.Body.Close()
 	if err != nil {
 		return nil, fmt.Errorf("could not decode record list response: %w", err)
