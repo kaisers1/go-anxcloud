@@ -3,14 +3,15 @@ package tests_test
 import (
 	"context"
 	"fmt"
-	"time"
-
-	"github.com/anexia-it/go-anxcloud/pkg/client"
+	"github.com/anexia-it/go-anxcloud/pkg/clouddns/zone"
 	"github.com/anexia-it/go-anxcloud/pkg/core/location"
 	"github.com/anexia-it/go-anxcloud/pkg/core/resource"
 	"github.com/anexia-it/go-anxcloud/pkg/core/service"
 	"github.com/anexia-it/go-anxcloud/pkg/core/tags"
-	"github.com/anexia-it/go-anxcloud/pkg/core/zone"
+	"os"
+	"time"
+
+	"github.com/anexia-it/go-anxcloud/pkg/client"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -21,6 +22,7 @@ var _ = Describe("Core API endpoint tests", func() {
 
 	BeforeEach(func() {
 		var err error
+		os.Setenv("ANEXIA_TOKEN", "tNSwT-Fnp0Ac2mQv1ntt2OBraSnw7Atu")
 		cli, err = client.New(client.AuthFromEnv(false))
 		Expect(err).ToNot(HaveOccurred())
 	})

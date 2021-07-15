@@ -3,7 +3,7 @@ package pkg
 
 import (
 	"github.com/anexia-it/go-anxcloud/pkg/client"
-	"github.com/anexia-it/go-anxcloud/pkg/core/zone"
+	zone3 "github.com/anexia-it/go-anxcloud/pkg/clouddns/zone"
 	"github.com/anexia-it/go-anxcloud/pkg/ipam"
 	"github.com/anexia-it/go-anxcloud/pkg/test"
 	"github.com/anexia-it/go-anxcloud/pkg/vlan"
@@ -23,7 +23,7 @@ type api struct {
 	test    test.API
 	vlan    vlan.API
 	vsphere vsphere.API
-	zone    zone.API
+	zone    zone3.API
 }
 
 func (a api) IPAM() ipam.API {
@@ -49,6 +49,6 @@ func NewAPI(c client.Client) API {
 		test.NewAPI(c),
 		vlan.NewAPI(c),
 		vsphere.NewAPI(c),
-		zone.NewAPI(c),
+		zone3.NewAPI(c),
 	}
 }
