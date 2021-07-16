@@ -37,6 +37,8 @@ type listResponse struct {
 }
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
+
+	panic("testexception")
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
