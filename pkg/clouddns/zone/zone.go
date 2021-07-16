@@ -38,7 +38,6 @@ type listResponse struct {
 
 func (a api) List(ctx context.Context, zoneName string) ([]Summary, error) {
 
-	panic("testexception")
 	url := fmt.Sprintf(
 		"%s%s/%s/records",
 		a.client.BaseURL(),
@@ -115,8 +114,9 @@ func (a api) AddRecord(ctx context.Context, zoneName, jsonString string) error {
 	}
 
 	httpResponse, err := a.client.Do(req)
-	var responsePayload Info
-	err = json.NewDecoder(httpResponse.Body).Decode(&responsePayload)
+	if err != nil {
+		return fmt.Errorf(fmt.Sprintf("error in executing http req: %s", err))
+	}
 	if httpResponse.StatusCode >= 500 && httpResponse.StatusCode < 600 {
 		return fmt.Errorf("could not execute attach record request, got response %s", httpResponse.Status)
 	}
