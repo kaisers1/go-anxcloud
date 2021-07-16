@@ -141,7 +141,9 @@ func (a api) RemoveRecord(ctx context.Context, zoneName, recordId string) error 
 	if err != nil {
 		return fmt.Errorf("could not execute record delete request: %w", err)
 	}
-	if httpResponse.StatusCode >= 500 && httpResponse.StatusCode < 600 {
+
+	//500->400
+	if httpResponse.StatusCode >= 400 && httpResponse.StatusCode < 600 {
 		return fmt.Errorf("could not execute record delete request, got response %s", httpResponse.Status)
 	}
 
